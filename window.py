@@ -1,10 +1,15 @@
 import tkinter as tk
 import numpy as np
+import tensorflow as tf
+from AccuracyPlot import accuracyPlot
+from LossFunctionPlot import lossFunctionPlot
+from Predict_VS_Actual_Values import PredictVSactual
+from model import showModelWeights
 
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        
+
         group_elem = tk.LabelFrame(self, padx=15, pady=10, text="Event Information")
         group_elem.pack(padx=10, pady=5)
 
@@ -38,10 +43,29 @@ class App(tk.Tk):
         self.MET.grid(row=7, column=1, sticky=tk.W)
         self.phiMET.grid(row=8, column=1, sticky=tk.W)
     
-        self.btn_predict = tk.Button(self, text="Print Value", command=self.print_result)
+        self.btn_predict = tk.Button(self, text="Predict", command=self.predict)
         self.btn_predict.pack(padx=10, pady=10, side=tk.RIGHT)
 
-    def print_result(self):
+        self.btn_predict = tk.Button(self, text="show accuracy", command=accuracyPlot)
+        self.btn_predict.pack(padx=10, pady=10, side=tk.RIGHT)
+
+        self.btn_predict = tk.Button(self, text="Show loss function", command=lossFunctionPlot)
+        self.btn_predict.pack(padx=10, pady=10, side=tk.RIGHT)
+
+        self.btn_predict = tk.Button(self, text="DistributionOfPredictVsActual", command=PredictVSactual)
+        self.btn_predict.pack(padx=10, pady=10, side=tk.RIGHT)
+
+        self.btn_predict = tk.Button(self, text="Model", command=showModelWeights)
+        self.btn_predict.pack(padx=10, pady=10, side=tk.RIGHT)
+
+        self.prediction_window = tk.Toplevel(self)
+        self.prediction_window.title("Prediction")
+        self.prediction_window.geometry("350x30")
+
+        self.prediction_label_small = tk.Label(self.prediction_window, text="Prediction:")
+        self.prediction_label_small.pack()
+
+    def predict(self):
         if self.pt.get() != '' and self.eta.get() != '' and self.phi.get() != '' and self.Q.get() != '' and self.chiSq.get() != '' and self.dxy.get() != '' and self.iso.get() != '' and self.MET.get() != '' and self.phiMET.get() != '':
             pt = float(self.pt.get())
             eta = float(self.eta.get())
@@ -53,10 +77,21 @@ class App(tk.Tk):
             MET = float(self.MET.get())
             phiMET = float(self.phiMET.get())
 
-            new_values = np.array([pt, eta, phi, Q, chiSq, dxy, iso, MET, phiMET])
+            new_values = np.array([[pt, eta, phi, Q, chiSq, dxy, iso, MET, phiMET]])
+            model = tf.keras.models.load_model('my_model.h5')
+            prediction = model.predict(new_values)
+            self.prediction_label_small.config(text="Predict value for pt: "+ str(prediction))
+            self.prediction_window.mainloop()
 
         else:
-            print('error')   
+            show_error_message("Prediction Error", "Please fill in all fields before predicting.")
+
+def show_error_message(title, message):
+    """Displays an error message in an alert window."""
+    root = tk.Tk()
+    root.withdraw()
+    tk.messagebox.showerror(title, message)
+    root.mainloop()   
 
 
 if __name__ == "__main__":
