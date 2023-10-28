@@ -38,8 +38,25 @@ class App(tk.Tk):
         self.MET.grid(row=7, column=1, sticky=tk.W)
         self.phiMET.grid(row=8, column=1, sticky=tk.W)
     
-        self.btn_predict = tk.Button(self, text="predict")
+        self.btn_predict = tk.Button(self, text="Print Value", command=self.print_result)
         self.btn_predict.pack(padx=10, pady=10, side=tk.RIGHT)
+
+    def print_result(self):
+        if self.pt.get() != '' and self.eta.get() != '' and self.phi.get() != '' and self.Q.get() != '' and self.chiSq.get() != '' and self.dxy.get() != '' and self.iso.get() != '' and self.MET.get() != '' and self.phiMET.get() != '':
+            pt = float(self.pt.get())
+            eta = float(self.eta.get())
+            phi = float(self.phi.get())
+            Q = float(self.Q.get())
+            chiSq = float(self.chiSq.get())
+            dxy = float(self.dxy.get())
+            iso = float(self.iso.get())
+            MET = float(self.MET.get())
+            phiMET = float(self.phiMET.get())
+
+            new_values = np.array([pt, eta, phi, Q, chiSq, dxy, iso, MET, phiMET])
+
+        else:
+            print('error')   
 
 
 if __name__ == "__main__":
