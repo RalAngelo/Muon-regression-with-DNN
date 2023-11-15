@@ -85,6 +85,33 @@ class App(tk.Tk):
 
         else:
             show_error_message("Prediction Error", "Please fill in all fields before predicting.")
+        
+        if pt < 25.0001 or pt > 49712.4:
+            show_error_message("Prediction Error", "25.0001 < pt < 49712.4")
+        
+        if eta < -2.1 or eta > 2.0999:
+            show_error_message("Prediction Error", "25.0001 < eta < 49712.4")
+        
+        if phi < -3.1413 or phi > 3.1416:
+            show_error_message("Prediction Error", "25.0001 < eta < 49712.4")
+        
+        if Q == -1 or Q == 1:
+            show_error_message("Prediction Error", "Q = -1 or 1")
+        
+        if chiSq < 0.0049 or chiSq > 5328.73:
+            show_error_message("Prediction Error", "25.0001 < eta < 49712.4")
+
+        if dxy < -340.023 or dxy > 291.479:
+            show_error_message("Prediction Error", "25.0001 < eta < 49712.4")
+        
+        if iso < 0 or iso > 24918.3:
+            show_error_message("Prediction Error", "25.0001 < eta < 49712.4")
+        
+        if MET < 0.0345 or MET > 332.55:
+            show_error_message("Prediction Error", "25.0001 < eta < 49712.4")
+        
+        if phiMET < -3.1413 or phiMET > 3.1414:
+            show_error_message("Prediction Error", "25.0001 < eta < 49712.4")
 
 def show_error_message(title, message):
     """Displays an error message in an alert window."""
